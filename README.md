@@ -50,8 +50,8 @@ access to emergency services.
 
 | Member | Role |
 |---|---|
-| Ahmed Almuhanna | Mobile UI/UX design |
-| Adam Aljuwayed | Security & privacy engineering, frontend/backend integration |
+| Ahmed Almuhanna | Mobile UI/UX design, frontend/backend integration |
+| Adam Aljuwayed | Security & privacy engineering |
 | Abdulaziz Alabdullatif | AI logic & integration, UML/systems design |
 | Nawaf Aljarrah | Project documentation |
 

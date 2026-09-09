@@ -4,6 +4,8 @@
 
 Senior project (IS499), Prince Sultan University · Semester 252 · Supervised by Dr. Omaia Al-Omari
 
+**🏆 Best Senior Project — PSU CCIS Expo 2026**
+
 ## Overview
 
 Healthcare in Saudi Arabia is spread across hospital systems that don't talk to each other. Patients

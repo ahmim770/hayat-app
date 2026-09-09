@@ -16,11 +16,48 @@ symptoms in Arabic or English and get routed to the right specialty and an avail
 access, lab results, prescriptions, and vaccination records are all in the same app, alongside quick
 access to emergency services.
 
+<img src="assets/screenshot-hospitals.png" width="260" alt="Hospitals list screen">
+
+## Architecture
+
+<img src="assets/use-case-diagram.png" width="600" alt="Use case diagram: Patient, Hospital API, and n8n workflow actors">
+
+Three actors drive the system: the **patient** (search, book, view records, chat with Morafiq), the
+**Hospital API** (availability/authentication), and the **n8n workflow** that powers Morafiq's symptom
+analysis.
+
+<img src="assets/sequence-diagram.png" width="600" alt="Sequence diagram: Mobile App, Backend Server, and N8n Workflow">
+
+The sequence diagram shows the two core flows: login/authentication, and the AI recommendation loop
+(app → backend → n8n workflow → doctor suggestion → booking).
+
+<img src="assets/activity-flow-diagram.png" width="420" alt="Activity flow diagram covering login, booking, records, and Morafiq">
+
+### Morafiq's AI pipeline
+
+<img src="assets/morafiq-n8n-workflow.png" width="600" alt="n8n workflow: Webhook to AI Agent with OpenAI chat model, Supabase vector store, and memory">
+
+Morafiq isn't a hardcoded chatbot — it's a Retrieval-Augmented Generation (RAG) pipeline built in
+**n8n**: a webhook receives the user's message, an AI Agent node (OpenAI chat model + short-term
+memory) answers using context pulled from a **Supabase vector store**, which is populated from the
+project's own medical reference documents (hospital/pharmacy directories — see the source `.pdf`s in
+`docs/`). This is why Morafiq can recommend a specific doctor and specialty instead of giving generic
+advice.
+
+<p float="left">
+  <img src="assets/screenshot-morafiq-chat-1.png" width="260" alt="Morafiq chat: user describes a headache">
+  <img src="assets/screenshot-morafiq-chat-2.png" width="260" alt="Morafiq chat: booking confirmed with Dr. Walid Barakat">
+</p>
+
+*A real conversation: the user describes a headache, Morafiq asks for their area, recommends a
+neurologist at a nearby hospital, and books the appointment once a time is confirmed.*
+
 ## Features
 
 - **Hospital & doctor search** — browse hospitals and doctor profiles, filter by specialty
-- **Appointment booking** — book directly from a doctor's profile
-- **Morafiq AI assistant** — chat-based symptom intake (Arabic/English) that recommends a specialty and doctor
+- **Appointment booking** — book directly from a doctor's profile or through Morafiq
+- **Morafiq AI assistant** — RAG-based chat (Arabic/English) that recommends a specialty, a specific
+  doctor, and can complete the booking in the same conversation
 - **Health records** — lab/radiology results, medical reports, allergies with severity tracking
 - **Medications** — medication list with reminder notifications (`MedicationReminderManager`)
 - **Pharmacy directory** — nearby pharmacies with details
@@ -41,8 +78,9 @@ access to emergency services.
 
 - **Swift / SwiftUI** — native iOS app, organized by feature (`App`, `Core`, `Views`, `Models`,
   `Services`, `Components`)
-- **Morafiq** — the in-app AI assistant talks to a hosted AI automation workflow over HTTPS
-  (`MorafiqService.swift`); the endpoint itself isn't published here to avoid exposing a live service
+- **Morafiq backend** — n8n automation (Webhook → AI Agent → OpenAI chat model + Supabase vector
+  store + memory → response), called from `MorafiqService.swift`; the live endpoint isn't published
+  here to avoid exposing a running service
 - **MVVM-leaning structure** — `AppState` for shared state, dedicated `*Data.swift` model files per
   domain (hospitals, doctors, pharmacies)
 
@@ -57,6 +95,12 @@ access to emergency services.
 
 All team members contributed to requirements analysis, system design, testing, and the final
 presentation.
+
+## Timeline
+
+<img src="assets/gantt-chart.png" width="700" alt="Project Gantt chart: planning, design, implementation, testing, documentation">
+
+Six phases from project planning through documentation & final presentation, run January–April 2026.
 
 ## Methodology
 
